@@ -6,7 +6,7 @@ using namespace std;
 struct Pipe
 {
 	string pipe_name = "0km";
-	int pipe_lenght = 0;
+	int pipe_length = 0;
 	int pipe_diametr = 0;
 };
 
@@ -36,7 +36,30 @@ int main()
 		cout << "0. Exit" << endl;
 		cout << "Enter the command: ";
 		cin >> num;
+		/*while (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Try again";
+			cin >> num;
+		}
+		*/
+		switch (num);
+		{
+			case 1:
+				cout << "Enter the pipe name: ";
+				break;
+			case 2:
+				cout << "Enter the station name: ";
+				break;
+			case 3:
+				cout << "lets see everything";
+				break;
+			default:
+				cout << endl << "error, try again" << endl;
+		}
 	}
+	return 0;
 }
 /*int main(int x)
 {
