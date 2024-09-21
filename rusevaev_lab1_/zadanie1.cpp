@@ -12,12 +12,51 @@ struct Pipe
 
 struct Station
 {
-	string station_name = "";
+	string station_name = "None";
 	int station_workshop = 0;
 	int station_work_workshop = 0;
 
 };
 
+Pipe Addpipe()
+{
+	Pipe new_pipe;
+	cout << "Add a new pipe:" << endl;
+	cout << "Enter the name: ";
+	cin >> new_pipe.pipe_name;
+	cout << "Enter the length of pipe (m): ";
+	cin >> new_pipe.pipe_length;
+	cout << "Enter the diametr of pipe (mm): ";
+	cin >> new_pipe.pipe_diametr;
+	return new_pipe;
+}
+
+void PrintAddpipe(Pipe new_pipe)
+{
+	cout << endl << "Info about your pipe..." << endl;
+	cout << "Name: " << new_pipe.pipe_name << "\tLength: " << new_pipe.pipe_length
+		<< "\tDiameter: " << new_pipe.pipe_diametr << endl;
+}
+
+Station Addstation()
+{
+	Station new_station;
+	cout << "Add a new CS:" << endl;
+	cout << "Enter the name: ";
+	cin >> new_station.station_name;
+	cout << "Number of workshops: ";
+	cin >> new_station.station_workshop;
+	cout << "Number of work workshops: ";
+	cin >> new_station.station_work_workshop;
+	return new_station;
+}
+
+void PrintAddstation(Station new_station)
+{
+	cout << endl << "Info about your CS..." << endl;
+	cout << "Name: " << new_station.station_name << "\tWorkshops: " << new_station.station_workshop
+		<< "\tActive workshops: " << endl;
+}
 
 int main()
 {
@@ -46,18 +85,13 @@ int main()
 		*/
 		switch (num);
 		{
-			case 1:
-				cout << "Enter the pipe name: ";
-				break;
-			case 2:
-				cout << "Enter the station name: ";
-				break;
-			case 3:
-				cout << "lets see everything";
-				break;
-			default:
-				cout << endl << "error, try again" << endl;
+		case 1:
+			pipe0 = Addpipe();
+			PrintAddpipe(pipe0);
+			break;
 		}
+		default:
+			cout << endl << "There is no such command, please, try again" << endl;
 	}
 	return 0;
 }
