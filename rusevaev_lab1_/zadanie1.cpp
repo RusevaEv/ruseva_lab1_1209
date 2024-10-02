@@ -101,7 +101,7 @@ Pipe Addpipe()
 	return new_pipe;
 }
 
-void PrintAddpipe(Pipe new_pipe)
+void PrintAddpipe(Pipe& new_pipe)
 {
 	cout << endl << "Info about your pipe:" << endl;
 	if (new_pipe.pipe_name == "None")
@@ -149,7 +149,7 @@ Station Addstation()
 	return new_station;
 }
 
-void PrintAddstation(Station new_station)
+void PrintAddstation(Station& new_station)
 {
 	cout << endl << "Info about your CS:" << endl;
 	if (new_station.station_name == "None")
@@ -184,7 +184,7 @@ void EditStation(Station& new_station)
 	PrintAddstation(new_station);
 }
 
-void FileRecord(Pipe pipe_data, Station station_data)
+void FileRecord(Pipe& pipe_data, Station& station_data)
 {
 	ofstream fout("file");
 	if (pipe_data.pipe_name == "None")
@@ -196,7 +196,7 @@ void FileRecord(Pipe pipe_data, Station station_data)
 		cout << "Info about the pipe in file.txt\n";
 		if (fout)
 		{
-			fout << "Info about your pipe:\n";
+			fout << "Info about your pipe: \n";
 			fout << pipe_data.pipe_name << endl;
 			fout << pipe_data.pipe_length << endl;
 			fout << pipe_data.pipe_diametr << endl;
@@ -212,7 +212,7 @@ void FileRecord(Pipe pipe_data, Station station_data)
 		cout << "Info about the station in file.txt\n";
 		if (fout)
 		{
-			fout << "Info about your station:\n";
+			fout << "Info about your station: \n";
 			fout << station_data.station_name << endl;
 			fout << station_data.station_workshop << endl;
 			fout << station_data.station_work_workshop << endl;
@@ -225,6 +225,33 @@ void FileRecord(Pipe pipe_data, Station station_data)
 void FileOutput(Pipe& pipe_data, Station& station_data)
 {
 	ifstream fin("file");
+	/*string zero_mean;
+	if (fin.is_open())
+	{
+		getline(fin, zero_mean);
+		if (zero_mean == "Info about your pipe: ") {
+			fin >> pipe_data.pipe_name;
+			fin >> pipe_data.pipe_length;
+			fin >> pipe_data.pipe_diametr;
+			fin >> pipe_data.pipe_repair;
+		}
+		else {
+			cout << "\nNo info in file\n";
+		}
+		if (zero_mean == "Info about your station: ") {
+			fin >> station_data.station_name;
+			fin >> station_data.station_workshop;
+			fin >> station_data.station_work_workshop;
+			fin >> station_data.station_efficiency;
+		}
+		else {
+			cout << "\nNo info in file!\n";
+		}
+		fin.close();
+	}
+	else {
+		cout << "Error in open file\n";
+	}*/
 	if (fin)
 	{
 		string zero_mean;
@@ -236,7 +263,7 @@ void FileOutput(Pipe& pipe_data, Station& station_data)
 			{
 				cout << "\nThe pipe data is get from the file!" << endl;
 				cout << "\nInfo about your pipe: " << endl;
-				getline(fin, pipe_data.pipe_name);
+				fin >> pipe_data.pipe_name;
 				cout << "Name of the pipe: " << pipe_data.pipe_name << endl;
 				fin >> pipe_data.pipe_length;
 				cout << "Length of the pipe: " << pipe_data.pipe_length << endl;
@@ -253,13 +280,12 @@ void FileOutput(Pipe& pipe_data, Station& station_data)
 				getline(fin, station_data.station_name);
 				cout << "Name of the station: " << station_data.station_name << endl;
 				fin >> station_data.station_workshop;
-				cout << "Number of workshops: " << station_data.station_workshop
-					<< endl;
+				cout << "Number of workshops: " << station_data.station_workshop << endl;
 				fin >> station_data.station_work_workshop;
 				cout << "Numbers of work workshops: " << station_data.station_work_workshop << endl;
 				fin >> station_data.station_efficiency;
 				cout << "Station efficiency index: " << station_data.station_efficiency << endl;
-				station_flag += 1;
+				station_flag += 1; 
 			}
 		}
 		if (pipe_flag == 0)
@@ -289,7 +315,7 @@ int main()
 		cout << "6. Save" << endl;
 		cout << "7. Download" << endl;
 		cout << "0. Exit" << endl;
-		cout << "Enter the command: ";
+		cout << endl << "Enter the command: ";
 		check_number_command(num);
 		switch (num)
 		{
@@ -335,10 +361,6 @@ int main()
 		{
 			return false;
 			break;
-		}
-		default:
-		{
-			cout << endl << "There is no such command, please, try again" << endl;
 		}
 		}
 	}
