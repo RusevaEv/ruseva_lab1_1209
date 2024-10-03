@@ -121,7 +121,7 @@ void RepairPipe(Pipe& new_pipe)
 	}
 	else
 	{
-		new_pipe.pipe_repair != new_pipe.pipe_repair;
+		new_pipe.pipe_repair = !new_pipe.pipe_repair;
 		cout << "You have changed repair status";
 		PrintAddpipe(new_pipe);
 	}
