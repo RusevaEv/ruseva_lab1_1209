@@ -62,7 +62,7 @@ bool check_bool(bool& bool_data)
 int check_number_command(int& int_data)
 {
 	cin >> int_data;
-	while (cin.fail() || cin.peek() != '\n' || int_data < 0 || int_data > 9)
+	while (cin.fail() || cin.peek() != '\n' || int_data < 0 || int_data > 7)
 	{
 		cin.clear();
 		cin.ignore(1000000, '\n');
