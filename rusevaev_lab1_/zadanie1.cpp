@@ -20,7 +20,7 @@ struct Station
 	double station_efficiency = 0.0;
 };
 
-int check_int(int& int_data)
+void check_int(int& int_data)//!
 {
 	cin >> int_data;
 	while (cin.fail() || cin.peek() != '\n' || int_data <= 0)
@@ -30,20 +30,6 @@ int check_int(int& int_data)
 		cout << "\nEnter integrate data > 0!!\n";
 		cin >> int_data;
 	}
-	return int_data;
-}
-
-double check_double(double& double_data)
-{
-	cin >> double_data;
-	while (cin.fail() || cin.peek() != '\n' || double_data <= 0)
-	{
-		cin.clear();
-		cin.ignore(100000, '\n');
-		cout << "\nEnter a double data > 0!!";
-		cin >> double_data;
-	}
-	return double_data;
 }
 
 bool check_bool(bool& bool_data)
@@ -66,13 +52,13 @@ int check_number_command(int& int_data)
 	{
 		cin.clear();
 		cin.ignore(1000000, '\n');
-		cout << "Enter number 0 to 9\n";
+		cout << "Enter number 0 to 7\n";
 		cin >> int_data;
 	}
 	return int_data;
 }
 
-double check2_double(double& efficiency_data)
+void check2_double(double& efficiency_data)//!!
 {
 	cin >> efficiency_data;
 	while (cin.fail() || cin.peek() != '\n' || (efficiency_data < 0.0) || (efficiency_data > 1.0))
@@ -82,7 +68,6 @@ double check2_double(double& efficiency_data)
 		cout << "Enter an efficiency data from 0.0 to 1.0\n";
 		cin >> efficiency_data;
 	}
-	return efficiency_data;
 }
 
 Pipe Addpipe()
@@ -184,9 +169,7 @@ void EditStation(Station& new_station)
 	PrintAddstation(new_station);
 }
 
-void FileRecord(Pipe& pipe_data, Station& station_data)
-{
-	ofstream fout("file");
+void save_pipe(ofstream& fout, const Pipe& pipe_data) {
 	if (pipe_data.pipe_name == "None")
 	{
 		cout << "Nothing to record about pipe\n";
@@ -194,7 +177,7 @@ void FileRecord(Pipe& pipe_data, Station& station_data)
 	else
 	{
 		cout << "Info about the pipe in file.txt\n";
-		if (fout)
+		if (fout)//!!!!!!!!!!!!!!
 		{
 			fout << "Info about your pipe: \n";
 			fout << pipe_data.pipe_name << endl;
@@ -203,6 +186,9 @@ void FileRecord(Pipe& pipe_data, Station& station_data)
 			fout << pipe_data.pipe_repair << endl;
 		}
 	}
+}
+
+void save_station(ofstream& fout, const Station& station_data) {
 	if (station_data.station_name == "None")
 	{
 		cout << "Nothing to record about station\n";
@@ -219,47 +205,29 @@ void FileRecord(Pipe& pipe_data, Station& station_data)
 			fout << station_data.station_efficiency << endl;
 		}
 	}
+}
+
+void FileRecord(const Pipe& pipe_data, const Station& station_data)
+{
+	ofstream fout("file");
+	save_pipe(fout, pipe_data);
+	save_station(fout, station_data);
 	fout.close();
 }
 
 void FileOutput(Pipe& pipe_data, Station& station_data)
 {
 	ifstream fin("file");
-	/*string zero_mean;
-	if (fin.is_open())
-	{
-		getline(fin, zero_mean);
-		if (zero_mean == "Info about your pipe: ") {
-			fin >> pipe_data.pipe_name;
-			fin >> pipe_data.pipe_length;
-			fin >> pipe_data.pipe_diametr;
-			fin >> pipe_data.pipe_repair;
-		}
-		else {
-			cout << "\nNo info in file\n";
-		}
-		if (zero_mean == "Info about your station: ") {
-			fin >> station_data.station_name;
-			fin >> station_data.station_workshop;
-			fin >> station_data.station_work_workshop;
-			fin >> station_data.station_efficiency;
-		}
-		else {
-			cout << "\nNo info in file!\n";
-		}
-		fin.close();
-	}
-	else {
-		cout << "Error in open file\n";
-	}*/
 	if (fin)
 	{
-		string zero_mean;
+		pipe_data = {};
+		station_data = {};
+		string line;//!!
 		int pipe_flag = 0;
 		int station_flag = 0;
-		while (getline(fin, zero_mean))
+		while (getline(fin, line))
 		{
-			if (zero_mean == "Info about your pipe: ")
+			if (line == "Info about your pipe: ")//!!
 			{
 				cout << "\nThe pipe data is get from the file!" << endl;
 				cout << "\nInfo about your pipe: " << endl;
@@ -273,7 +241,7 @@ void FileOutput(Pipe& pipe_data, Station& station_data)
 				cout << "Repair status of the pipe: " << pipe_data.pipe_repair << endl;
 				pipe_flag += 1;
 			}
-			if (zero_mean == "Info about your station: ")
+			if (line == "Info about your station: ")//!!
 			{
 				cout << "\nThe station sata is get from the file!" << endl;
 				cout << "\nInfo about your station: " << endl;
@@ -366,4 +334,3 @@ int main()
 	}
 	return 0;
 }
-//пссп
