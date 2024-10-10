@@ -7,7 +7,7 @@ using namespace std;
 struct Pipe
 {
 	string pipe_name = "None";
-	int pipe_length = 0;
+	double pipe_length = 0.0;
 	int pipe_diametr = 0;
 	bool pipe_repair = false;
 };
@@ -39,7 +39,7 @@ bool check_bool(bool& bool_data)
 	{
 		cin.clear();
 		cin.ignore(10000, '\n');
-		cout << "\nEnter a boolean data type\n";
+		cout << "\nEnter 0 or 1\n";
 		cin >> bool_data;
 	}
 	return bool_data;
@@ -58,7 +58,7 @@ int check_number_command(int& int_data)
 	return int_data;
 }
 
-void check2_double(double& efficiency_data)//!!
+void check_double(double& efficiency_data)//!!
 {
 	cin >> efficiency_data;
 	while (cin.fail() || cin.peek() != '\n' || (efficiency_data < 0.0) || (efficiency_data > 1.0))
@@ -70,6 +70,18 @@ void check2_double(double& efficiency_data)//!!
 	}
 }
 
+void check_double_lenght(double& length_data)//!!
+{
+	cin >> length_data;
+	while (cin.fail() || cin.peek() != '\n' || (length_data <= 0.0))
+	{
+		cin.clear();
+		cin.ignore(100000, '\n');
+		cout << "Enter a number > 0.0\n";
+		cin >> length_data;
+	}
+}
+
 Pipe Addpipe()
 {
 	Pipe new_pipe;
@@ -78,7 +90,7 @@ Pipe Addpipe()
 	cin.ignore();
 	getline(cin, new_pipe.pipe_name);
 	cout << "Enter the length of pipe (m): ";
-	check_int(new_pipe.pipe_length);
+	check_double_lenght(new_pipe.pipe_length);
 	cout << "Enter the diametr of pipe (mm): ";
 	check_int(new_pipe.pipe_diametr);
 	cout << "Enter the repair status (0 or 1): ";
@@ -86,7 +98,7 @@ Pipe Addpipe()
 	return new_pipe;
 }
 
-void PrintAddpipe(Pipe& new_pipe)
+void OutputAddpipe(const Pipe& new_pipe)
 {
 	cout << endl << "Info about your pipe:" << endl;
 	if (new_pipe.pipe_name == "None")
@@ -108,7 +120,7 @@ void RepairPipe(Pipe& new_pipe)
 	{
 		new_pipe.pipe_repair = !new_pipe.pipe_repair;
 		cout << "You have changed repair status";
-		PrintAddpipe(new_pipe);
+		OutputAddpipe(new_pipe);
 	}
 }
 
@@ -130,11 +142,11 @@ Station Addstation()
 		check_int(new_station.station_work_workshop);
 	}
 	cout << "Enter the station efficiency index (from 0 to 1): ";
-	check2_double(new_station.station_efficiency);
+	check_double(new_station.station_efficiency);
 	return new_station;
 }
 
-void PrintAddstation(Station& new_station)
+void OutputAddstation(const Station& new_station)//??
 {
 	cout << endl << "Info about your CS:" << endl;
 	if (new_station.station_name == "None")
@@ -166,7 +178,7 @@ void EditStation(Station& new_station)
 			check_int(new_station.station_work_workshop);
 		}
 	}
-	PrintAddstation(new_station);
+	OutputAddstation(new_station);
 }
 
 void save_pipe(ofstream& fout, const Pipe& pipe_data) {
@@ -215,59 +227,52 @@ void FileRecord(const Pipe& pipe_data, const Station& station_data)
 	fout.close();
 }
 
+void FileOutputPipe(ifstream& fin, Pipe& pipe_data)
+{
+	getline(fin, pipe_data.pipe_name);
+	fin >> pipe_data.pipe_length;
+	fin >> pipe_data.pipe_diametr;
+	fin >> pipe_data.pipe_repair;
+}
+
+
+void FileOutputStation(ifstream& fin, Station& station_data)
+{
+	getline(fin, station_data.station_name);
+	fin >> station_data.station_workshop;
+	fin >> station_data.station_work_workshop;
+	fin >> station_data.station_efficiency;
+}
+
+
 void FileOutput(Pipe& pipe_data, Station& station_data)
 {
+	pipe_data = {};
+	station_data = {};
 	ifstream fin("file");
-	if (fin)
+	string line;
+	int flag = 0;
+	if (fin.is_open())
 	{
-		pipe_data = {};
-		station_data = {};
-		string line;//!!
-		int pipe_flag = 0;
-		int station_flag = 0;
 		while (getline(fin, line))
 		{
-			if (line == "Info about your pipe: ")//!!
+			if (line == "Info about your pipe: ")
 			{
-				cout << "\nThe pipe data is get from the file!" << endl;
-				cout << "\nInfo about your pipe: " << endl;
-				fin >> pipe_data.pipe_name;
-				cout << "Name of the pipe: " << pipe_data.pipe_name << endl;
-				fin >> pipe_data.pipe_length;
-				cout << "Length of the pipe: " << pipe_data.pipe_length << endl;
-				fin >> pipe_data.pipe_diametr;
-				cout << "Diameter of the pipe: " << pipe_data.pipe_diametr << endl;
-				fin >> pipe_data.pipe_repair;
-				cout << "Repair status of the pipe: " << pipe_data.pipe_repair << endl;
-				pipe_flag += 1;
+				FileOutputPipe(fin, pipe_data);
+				cout << "\nThe pipe data is get from the file" << endl;
+				flag = 1;
 			}
-			if (line == "Info about your station: ")//!!
+			else if (line == "Info about your station: ")
 			{
-				cout << "\nThe station sata is get from the file!" << endl;
-				cout << "\nInfo about your station: " << endl;
-				getline(fin, station_data.station_name);
-				cout << "Name of the station: " << station_data.station_name << endl;
-				fin >> station_data.station_workshop;
-				cout << "Number of workshops: " << station_data.station_workshop << endl;
-				fin >> station_data.station_work_workshop;
-				cout << "Numbers of work workshops: " << station_data.station_work_workshop << endl;
-				fin >> station_data.station_efficiency;
-				cout << "Station efficiency index: " << station_data.station_efficiency << endl;
-				station_flag += 1; 
+				FileOutputStation(fin, station_data);
+				cout << "\nThe station data is get from the file" << endl;
+				flag = 1;
 			}
-		}
-		if (pipe_flag == 0)
-		{
-			cout << "\nNo info about pipe from file" << endl;
-		}
-		if (station_flag == 0)
-		{
-			cout << "\nNo info about station from file" << endl;
+		if (flag == 0) cout << "\nNo info about station from file" << endl;
 		}
 		fin.close();
 	}
 }
-
 int main()
 {
 	Pipe pipe0;
@@ -290,19 +295,19 @@ int main()
 		case 1:
 		{
 			pipe0 = Addpipe();
-			PrintAddpipe(pipe0);
+			OutputAddpipe(pipe0);
 			break;
 		}
 		case 2:
 		{
 			station0 = Addstation();
-			PrintAddstation(station0);
+			OutputAddstation(station0);
 			break;
 		}
 		case 3:
 		{
-			PrintAddpipe(pipe0);
-			PrintAddstation(station0);
+			OutputAddpipe(pipe0);
+			OutputAddstation(station0);
 			break;
 		}
 		case 4:

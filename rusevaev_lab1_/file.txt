@@ -1,5 +1,5 @@
 Info about your pipe: 
-fgh
+fgh ghj
 9
 9
 0
